@@ -1,0 +1,63 @@
+#include <iostream>
+#include <Windows.h>
+
+#include <cstdlib> // Для функцій rand() і srand()
+
+// Функція для виведення масиву на екран
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; ++i) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+// Функція для сортування масиву методом сортування Шелла
+void shellSort(int arr[], int n) {
+    // Початковий крок - половина довжини масиву
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        // Проведення сортування з кроком gap
+        for (int i = gap; i < n; ++i) {
+            int temp = arr[i];
+            int j;
+            // Порівняння елементів з кроком gap та обмін значень при необхідності
+            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = temp;
+        }
+    }
+}
+
+int main() {
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    int n;
+    std::cout << "Введіть кількість елементів у масиві (непарне число): ";
+    std::cin >> n;
+
+    // Перевірка на непарність кількості елементів
+    if (n % 2 == 0) {
+        std::cerr << "Кількість елементів повинна бути непарною!" << std::endl;
+        return 1;
+    }
+
+    // Створення масиву та заповнення його випадковими числами
+    int* arr = new int[n];
+    std::srand(time(0)); // Ініціалізація генератора випадкових чисел
+    for (int i = 0; i < n; ++i) {
+        arr[i] = std::rand() % 100; // Генеруємо числа в діапазоні від 0 до 99
+    }
+
+    std::cout << "Початковий масив: ";
+    printArray(arr, n);
+
+    // Сортування методом сортування Шелла
+    shellSort(arr, n);
+
+    std::cout << "Відсортований масив: ";
+    printArray(arr, n);
+
+    delete[] arr; // Звільнення пам'яті
+
+    return 0;
+}
